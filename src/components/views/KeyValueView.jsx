@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { KeyValueStore } from '../../utils/dbSimulation';
-import { Key, Database, Zap, Activity, Server, Search, CheckCircle, XCircle } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { Key, Database, Zap, Activity, Server, Search, CheckCircle, Info } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, CartesianGrid } from 'recharts';
 
 const KeyValueView = ({ data }) => {
     const [store] = useState(new KeyValueStore(data));
@@ -36,14 +36,12 @@ const KeyValueView = ({ data }) => {
         setRandomUser({ key, ...val });
 
         // Visual Hash Simulation
-        // Simple hash to bucket 0-15
         let hash = 0;
         for (let i = 0; i < key.length; i++) hash = (hash << 5) - hash + key.charCodeAt(i);
         const bucketId = Math.abs(hash) % 16;
         setActiveBucket(bucketId);
         setTimeout(() => setActiveBucket(null), 1500);
 
-        // Update stats
         setStats(prev => ({ ...prev, hits: prev.hits + 1 }));
     };
 
@@ -80,49 +78,52 @@ const KeyValueView = ({ data }) => {
                         }}>
                             <div style={{ fontSize: '0.7rem', color: '#64748b' }}>Bucket</div>
                             <div style={{ fontFamily: 'monospace', color: activeBucket === b.id ? '#3b82f6' : '#94a3b8' }}>{b.label}</div>
-                            {activeBucket === b.id && <div style={{ fontSize: '0.6rem', color: '#3b82f6', marginTop: '0.2rem' }}>Storing...</div>}
                         </div>
                     ))}
                 </div>
-                <p style={{ marginTop: '1rem', fontSize: '0.85rem', color: '#64748b', textAlign: 'center' }}>
-                    Keys are passed through a hash function and distributed across buckets for <b>O(1)</b> access time.
-                </p>
+            </div>
+
+            {/* DATA STORED PREVIEW */}
+            <div className="card" style={{ marginBottom: '2rem' }}>
+                <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                    <Server size={18} /> Sample Stored Data
+                    <span style={{ fontSize: '0.75rem', fontWeight: 'normal', color: '#94a3b8', marginLeft: 'auto' }}>Memory usage: ~12MB</span>
+                </h3>
+                <div style={{ display: 'flex', gap: '1rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+                    {Object.entries(data).slice(0, 6).map(([k, v], i) => (
+                        <div key={k} style={{ minWidth: '200px', background: '#0f172a', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid #334155' }}>
+                            <div style={{ fontSize: '0.8rem', color: '#f59e0b', marginBottom: '0.25rem', fontFamily: 'monospace' }}>KEY: {k}</div>
+                            <div style={{ fontSize: '0.75rem', color: '#cbd5e1' }}>{JSON.stringify(v).substring(0, 40)}...</div>
+                        </div>
+                    ))}
+                </div>
             </div>
 
             {/* ANALYTICS DASHBOARD */}
             <div className="card-grid" style={{ marginBottom: '2rem' }}>
-                {/* Hit Ratio */}
                 <div className="card">
-                    <h3>⚡ Cache Performance</h3>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <h3>⚡ Cache Performance</h3>
+                        <TooltipWrapper text="High Cache Hits (Green) mean data is found in memory (0.1ms). Misses (Red) force a slow database read (50ms)." />
+                    </div>
                     <div style={{ height: '200px' }}>
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
-                                <Pie
-                                    data={hitRateData}
-                                    cx="50%"
-                                    cy="50%"
-                                    innerRadius={50}
-                                    outerRadius={70}
-                                    paddingAngle={5}
-                                    dataKey="value"
-                                >
-                                    {hitRateData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
+                                <Pie data={hitRateData} cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={5} dataKey="value">
+                                    {hitRateData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                                 </Pie>
                                 <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: 'none' }} />
                                 <Legend verticalAlign="bottom" height={36} />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
-                    <div style={{ textAlign: 'center', marginTop: '-10px', fontSize: '0.9rem', color: '#94a3b8' }}>
-                        Hit Ratio: <span style={{ color: '#10b981', fontWeight: 'bold' }}>{((stats.hits / (stats.hits + stats.misses)) * 100).toFixed(1)}%</span>
-                    </div>
                 </div>
 
-                {/* Throughput */}
                 <div className="card" style={{ gridColumn: 'span 2' }}>
-                    <h3>🚀 Throughput (Ops/Sec)</h3>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <h3>🚀 Throughput (Ops/Sec)</h3>
+                        <TooltipWrapper text="Key-Value stores can handle massive concurrency. This chart shows Operations Per Second (Ops/Sec) handling thousands of requests instantly." />
+                    </div>
                     <div style={{ height: '200px' }}>
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={stats.ops}>
@@ -143,49 +144,28 @@ const KeyValueView = ({ data }) => {
                 </div>
             </div>
 
-            {/* INTERACTIVE TOOLS */}
+            {/* TOOLS */}
             <div className="card-grid">
-                {/* User Lookup */}
                 <div className="card">
                     <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Search size={18} /> User Lookup</h3>
-                    <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginBottom: '1rem' }}>
-                        <code>GET user:id</code> (O(1) Fetch)
-                    </p>
-                    <button className="btn" onClick={handleRandom} style={{ width: '100%' }}>Fetch Random Key</button>
-
+                    <button className="btn" onClick={handleRandom} style={{ width: '100%', marginTop: '1rem' }}>Fetch Random Key</button>
                     {randomUser && (
                         <div style={{ marginTop: '1rem', background: '#0f172a', padding: '1rem', borderRadius: '0.5rem', border: '1px solid #1e293b' }}>
-                            <div style={{ color: '#f59e0b', fontSize: '0.8rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <Key size={14} /> {randomUser.key}
-                            </div>
-                            <div>Name: <span style={{ fontWeight: 'bold' }}>{randomUser.name}</span></div>
-                            <div>Plan: <span style={{ color: '#10b981' }}>{randomUser.plan}</span></div>
+                            <div style={{ color: '#f59e0b', fontSize: '0.8rem' }}>KEY: {randomUser.key}</div>
+                            <div>Name: <b>{randomUser.name}</b></div>
                         </div>
                     )}
                 </div>
 
-                {/* Session */}
                 <div className="card">
                     <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Activity size={18} /> Session Mgt</h3>
-                    <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginBottom: '1rem' }}>
-                        Checks active auth tokens in μs.
-                    </p>
-                    <button className="btn btn-outline" onClick={() => setSessionActive(true)} style={{ width: '100%' }}>Check Live Session</button>
-
-                    {sessionActive && (
-                        <div style={{ marginTop: '1rem', color: '#10b981', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                            <CheckCircle size={20} /> SESSION ACTIVE
-                        </div>
-                    )}
+                    <button className="btn btn-outline" onClick={() => setSessionActive(true)} style={{ width: '100%', marginTop: '1rem' }}>Check Session</button>
+                    {sessionActive && <div style={{ marginTop: '1rem', color: '#10b981', textAlign: 'center' }}>✓ SESSION ACTIVE</div>}
                 </div>
 
-                {/* Counter */}
                 <div className="card">
                     <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Zap size={18} /> Atomic Counter</h3>
-                    <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginBottom: '1rem' }}>
-                        <code>INCR page_views</code>
-                    </p>
-                    <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem', color: '#fff' }}>{views.toLocaleString()}</div>
+                    <div style={{ fontSize: '2rem', fontWeight: 'bold', margin: '0.5rem 0' }}>{views.toLocaleString()}</div>
                     <button className="btn" onClick={() => setViews(v => v + 1)} style={{ width: '100%', background: '#f59e0b' }}>+ Increment</button>
                 </div>
             </div>
@@ -193,8 +173,33 @@ const KeyValueView = ({ data }) => {
     );
 };
 
-// Import CartesianGrid if not already imported (it was missing in the top imports in previous file view, but utilized in code)
-// Adding it to imports safe-guard.
-import { CartesianGrid } from 'recharts';
+const TooltipWrapper = ({ text }) => (
+    <div className="tooltip-container" style={{ position: 'relative', display: 'inline-block', cursor: 'pointer' }}>
+        <Info size={16} color="#94a3b8" />
+        <div className="tooltip-text">{text}</div>
+        <style>{`
+            .tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
+            .tooltip-text {
+                visibility: hidden;
+                width: 200px;
+                background-color: #0f172a;
+                color: #fff;
+                text-align: center;
+                border-radius: 6px;
+                padding: 10px;
+                position: absolute;
+                z-index: 1;
+                bottom: 125%;
+                left: 50%;
+                margin-left: -100px;
+                opacity: 0;
+                transition: opacity 0.3s;
+                border: 1px solid #334155;
+                font-size: 0.8rem;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            }
+        `}</style>
+    </div>
+);
 
 export default KeyValueView;
