@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Database, FileText, Key, Server, Share2, Activity, PlaySquare, Star, Twitter, TrendingUp, FolderOpen, Folder, X, ChevronLeft } from 'lucide-react';
+import { Database, FileText, Key, Server, Share2, Activity, PlaySquare, Star, Twitter, TrendingUp, FolderOpen, Folder, X, ChevronLeft, Linkedin, Github } from 'lucide-react';
 
 const Sidebar = ({ currentMode, setMode, currentView, setView, isOpen, toggle }) => {
     const [expanded, setExpanded] = useState({ general: true, text: true });
@@ -93,9 +93,23 @@ const Sidebar = ({ currentMode, setMode, currentView, setView, isOpen, toggle })
                 )}
             </div>
 
-            <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid #1e293b', fontSize: '0.8rem', color: '#64748b', display: 'flex', justifyContent: 'space-between' }}>
-                <span>Cluster Status</span>
-                <span style={{ color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>● Connected</span>
+            <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid #1e293b', fontSize: '0.8rem', color: '#64748b' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                    <span>Cluster Status</span>
+                    <span style={{ color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>● Connected</span>
+                </div>
+
+                <div style={{ textAlign: 'center', fontSize: '0.75rem', color: '#94a3b8', paddingTop: '1rem', borderTop: '1px dashed #334155' }}>
+                    <div style={{ marginBottom: '0.5rem' }}>Made with <span style={{ color: '#3b82f6', fontWeight: 'bold' }}>Google Antigravity</span> & <span style={{ color: '#fff', fontWeight: 'bold' }}>Divesh Jadhwani</span></div>
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+                        <a href="https://www.linkedin.com/in/dhackmt" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.25rem', textDecoration: 'none', transition: 'color 0.2s' }}>
+                            <Linkedin size={14} /> LinkedIn
+                        </a>
+                        <a href="https://github.com/d-hackmt" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.25rem', textDecoration: 'none', transition: 'color 0.2s' }}>
+                            <Github size={14} /> GitHub
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     );
