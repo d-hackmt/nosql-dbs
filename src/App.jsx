@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Sidebar from './components/Sidebar';
 import { generateProducts, generateUsers, generateTelecomData, generateGraphData, generateReviews, generateTweets, generateEconomics } from './utils/dataGenerator';
+import { Menu } from 'lucide-react';
 import './App.css';
 
 // Lazy load views to simulate real app structure
@@ -18,6 +19,7 @@ function App() {
     const [mode, setMode] = useState("general");
     const [view, setView] = useState("doc");
     const [loading, setLoading] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     // Generate Data Once
     const data = useMemo(() => {
@@ -58,13 +60,24 @@ function App() {
 
     return (
         <div className="app-container">
-            <Sidebar
-                currentMode={mode}
-                setMode={setMode}
-                currentView={view}
-                setView={setView}
-            />
-            <div className="main-content">
+            {isSidebarOpen ? (
+                <Sidebar
+                    currentMode={mode}
+                    setMode={setMode}
+                    currentView={view}
+                    setView={setView}
+                    isOpen={isSidebarOpen}
+                    toggle={() => setIsSidebarOpen(false)}
+                />
+            ) : (
+                <div style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: 50 }}>
+                    <button className="btn-icon" onClick={() => setIsSidebarOpen(true)} style={{ background: '#1e293b', border: '1px solid #334155', color: 'white', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Menu size={24} />
+                    </button>
+                </div>
+            )}
+
+            <div className="main-content" style={{ marginLeft: isSidebarOpen ? '0' : '0' }}>
                 {renderView()}
             </div>
         </div>

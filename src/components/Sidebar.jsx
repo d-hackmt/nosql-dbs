@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
-import { Database, FileText, Key, Server, Share2, Activity, PlaySquare, Star, Twitter, TrendingUp, FolderOpen, Folder } from 'lucide-react';
+import { Database, FileText, Key, Server, Share2, Activity, PlaySquare, Star, Twitter, TrendingUp, FolderOpen, Folder, X, ChevronLeft } from 'lucide-react';
 
-const Sidebar = ({ currentMode, setMode, currentView, setView }) => {
+const Sidebar = ({ currentMode, setMode, currentView, setView, isOpen, toggle }) => {
     const [expanded, setExpanded] = useState({ general: true, text: true });
 
-    const toggle = (section) => setExpanded(prev => ({ ...prev, [section]: !prev[section] }));
+    const toggleSection = (section) => setExpanded(prev => ({ ...prev, [section]: !prev[section] }));
 
     return (
         <div className="sidebar">
-            <div className="brand" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Database size={24} color="#3b82f6" />
-                <span>NoSQL Demo</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
+                <div className="brand" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                    <Database size={24} color="#3b82f6" />
+                    <span>NoSQL Demo</span>
+                </div>
+                <button onClick={toggle} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '0.25rem', display: 'flex', alignItems: 'center' }}>
+                    <ChevronLeft size={24} />
+                </button>
             </div>
 
             <div className="nav-section">
@@ -29,7 +34,7 @@ const Sidebar = ({ currentMode, setMode, currentView, setView }) => {
                 {currentMode === 'general' && (
                     <>
                         <div className="nav-group">
-                            <div className="nav-title" onClick={() => toggle('general')}>
+                            <div className="nav-title" onClick={() => toggleSection('general')}>
                                 CORE MODULES
                             </div>
 
