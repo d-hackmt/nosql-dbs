@@ -17,7 +17,7 @@ const DocumentView = ({ data }) => {
         <div className="view-container">
             <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                    <h1>📄 Document Database</h1>
+                    <h1><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB" width="32" height="32" style={{ verticalAlign: 'middle', marginRight: '0.75rem' }} /> Document Database</h1>
                     <p style={{ color: '#94a3b8' }}>Collection: <span style={{ fontFamily: 'monospace', color: '#38bdf8' }}>products</span> ({data.length.toLocaleString()} documents)</p>
                 </div>
                 <div style={{ display: 'flex', gap: '1rem' }}>

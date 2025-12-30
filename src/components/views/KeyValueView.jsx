@@ -55,7 +55,7 @@ const KeyValueView = ({ data }) => {
     return (
         <div className="view-container">
             <header style={{ marginBottom: '2rem' }}>
-                <h1>🔑 Key-Value Store</h1>
+                <h1><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" alt="Redis" width="32" height="32" style={{ verticalAlign: 'middle', marginRight: '0.75rem' }} /> Key-Value Store</h1>
                 <p style={{ color: '#94a3b8' }}>Redis Style • In-Memory Hash Map • Sub-millisecond Latency</p>
             </header>
 

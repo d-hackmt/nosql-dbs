@@ -66,7 +66,7 @@ const SqlVsColumnView = ({ data }) => {
     return (
         <div className="view-container">
             <header style={{ marginBottom: '2rem' }}>
-                <h1>🆚 SQL vs Column Store</h1>
+                <h1><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="SQL" width="32" height="32" style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} /> SQL vs <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cassandra/cassandra-original.svg" alt="Cassandra" width="32" height="32" style={{ verticalAlign: 'middle', marginLeft: '0.5rem', marginRight: '0.5rem' }} /> Column Store</h1>
                 <p style={{ color: '#94a3b8' }}>Visualizing Memory Layout & I/O Efficiency</p>
             </header>
 

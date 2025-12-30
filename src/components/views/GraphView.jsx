@@ -82,7 +82,7 @@ const GraphView = ({ data }) => {
     return (
         <div className="view-container" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             <header style={{ marginBottom: '1.5rem', flexShrink: 0 }}>
-                <h1>🕸 Graph Database</h1>
+                <h1><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/neo4j/neo4j-original.svg" alt="Neo4j" width="32" height="32" style={{ verticalAlign: 'middle', marginRight: '0.75rem' }} /> Graph Database</h1>
                 <p style={{ color: '#94a3b8' }}>Neo4j Style • {graphData.nodes.length} Nodes • {graphData.links.length} Relationships</p>
             </header>
 

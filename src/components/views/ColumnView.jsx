@@ -68,7 +68,7 @@ const ColumnView = ({ data }) => {
     return (
         <div className="view-container">
             <header style={{ marginBottom: '2rem' }}>
-                <h1>📚 Column Store Analytics</h1>
+                <h1><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cassandra/cassandra-original.svg" alt="Cassandra" width="32" height="32" style={{ verticalAlign: 'middle', marginRight: '0.75rem' }} /> Column Store Analytics</h1>
                 <p style={{ color: '#94a3b8' }}>Wide-Column Storage • Partitioned Analytics • High Throughput</p>
             </header>
 
